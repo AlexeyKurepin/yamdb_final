@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   tests:
+    name: Run tests
     runs-on: ubuntu-latest
 
     steps:
@@ -48,6 +49,7 @@ jobs:
           tags: kurepin83/yamdb_final:latest
 
   deploy:
+    name: Deploy project
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
     if: github.ref == 'refs/heads/master'
@@ -72,12 +74,13 @@ jobs:
             sudo docker-compose up -d
 
   send_message:
+    name: Send Message
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-    - name: send message
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_TO }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: ${{ github.workflow }} успешно выполнен!
+      - name: send message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: ${{ github.workflow }} успешно выполнен!
