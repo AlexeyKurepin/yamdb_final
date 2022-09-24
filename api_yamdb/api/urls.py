@@ -1,33 +1,22 @@
-from api.views import (CategoryViewSet, CommentViewSet, GenreViewSet,
-                       ReviewViewSet, TitleViewSet, UserViewSet, create_user,
-                       get_jwt_token)
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-router = DefaultRouter()
+from .views import (CategoryViewSet, CommentsViewSet, GenreViewSet, GetToken,
+                    ReviewsViewSet, SignUp, TitleViewSet, UserViewSet)
 
-
-router.register('users', UserViewSet, basename='users')
-router.register('categories', CategoryViewSet, basename='categories')
-router.register('titles', TitleViewSet, basename='titles')
-router.register('genres', GenreViewSet, basename='genres')
-router.register(
-    r'titles/(?P<title_id>\d+)/reviews',
-    ReviewViewSet,
-    basename='reviews'
-)
-router.register(
+router_v1 = DefaultRouter()
+router_v1.register('users', UserViewSet, basename="users")
+router_v1.register(r'titles/(?P<title_id>\d+)/reviews', ReviewsViewSet,
+                   basename='reviews')
+router_v1.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
-    CommentViewSet,
-    basename='comments'
-)
-
-auth_urlpatterns = [
-    path('token/', get_jwt_token),
-    path('signup/', create_user),
-]
+    CommentsViewSet, basename='comments')
+router_v1.register('categories', CategoryViewSet)
+router_v1.register('genres', GenreViewSet)
+router_v1.register('titles', TitleViewSet)
 
 urlpatterns = [
-    path('v1/', include(router.urls)),
-    path('v1/auth/', include(auth_urlpatterns)),
+    path('v1/', include(router_v1.urls)),
+    path('v1/auth/token/', GetToken.as_view()),
+    path('v1/auth/signup/', SignUp.as_view())
 ]
