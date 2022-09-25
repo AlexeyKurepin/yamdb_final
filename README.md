@@ -10,7 +10,7 @@
 
  
 
-###Технологии
+### Технологии
  
 
 
@@ -33,7 +33,7 @@ Python 3.9, Django 2.2.16, Django REST Framework, Simple-JWT, postgresql
 
  
 
-###Автор:
+### Автор:
  
 
 
